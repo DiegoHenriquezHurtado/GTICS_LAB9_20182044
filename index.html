@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STFGAMES</title>
+</head>
+
+<body>
+    <form action="" method="post">
+        <ul>
+            <li>
+                <label>Ingrese la cantidad minima de cubos de hielo necesarios:</label>
+                <input type="number" id="cantidad_cubos_hielo">
+            </li>
+            <li>
+                <label>Numero de figuras: </label>
+                <input type="number" id="numero_figuras">
+            </li>
+            <li>
+                <button type="submit" onclick="crearPlantilla">Iniciar Juego</button>
+            </li>
+        </ul>
+    </form>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <script>
+        const c = document.getElementById("gameCanvas");
+        const ctx = c.getContext("2d");
+        const celdaSize = 40;
+        const cuadricula = [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        ];
+
+        const figura = {
+            x: 2,
+            y: 2,
+            size: celdaSize,
+            color: 'black',
+        };
+
+        function drawCuadricula() {
+            for (let row = 0; row < cuadricula.length; row++) {
+                for (let col = 0; col < cuadricula[row].length; col++) {
+                    ctx.fillStyle = cuadricula[row][col] === 0 ? 'skyblue' : 'black';
+                    ctx.fillRect(col * celdaSize, row * celdaSize, celdaSize - 1, celdaSize - 1);
+                }
+            }
+        }
+
+
+        function drawFiguras() {
+            ctx.fillStyle = figura.color;
+            ctx.fillRect(figura.x * celdaSize + 1, figura.y * celdaSize + 1, figura.size, figura.size);
+        }
+
+        function drawJuego() {
+            ctx.clearRect(0, 0, c.width, c.height);
+            drawCuadricula();  
+            drawFiguras();         
+            
+        }
+
+        function moveFigura(dx, dy) {
+            const newX = figura.x + dx;
+            const newY = figura.y + dy;
+            if (cuadricula[newY][newX] === 0) {
+                figura.x = newX;
+                figura.y = newY;
+            }
+            drawJuego();
+        }
+
+        document.addEventListener('keydown', (event) => {
+            switch (event.key) {
+                case 'ArrowUp':
+                    moveFigura(0, -1);
+                    break;
+                case 'ArrowDown':
+                    moveFigura(0, 1);
+                    break;
+                case 'ArrowLeft':
+                    moveFigura(-1, 0);
+                    break;
+                case 'ArrowRight':
+                    moveFigura(1, 0);
+                    break;
+            }
+        });
+
+        drawJuego();
+
+    </script>
+</body>
+
+</html>
